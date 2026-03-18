@@ -4,5 +4,6 @@ python_sources = [
 
 py3.install_sources(python_sources)
 
+subdir('codes')
 subdir('matplotlib')
 subdir('mpl_toolkits')
