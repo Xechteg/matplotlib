@@ -55,7 +55,8 @@ import sys
 import threading
 import time
 from typing import IO, TYPE_CHECKING, cast, overload
-
+from pathlib import Path
+import math
 from cycler import cycler  # noqa: F401
 import matplotlib
 import matplotlib.image
@@ -896,6 +897,50 @@ def xkcd(
 
 
 ## Figures ##
+def figures(file_number, count=20, part=None):
+    base_dir = Path(__file__).resolve().parent
+    code_file = base_dir / f"{file_number}.py"
+
+    if not code_file.exists():
+        print(f"Файл не найден: {code_file}")
+        return
+
+    try:
+        lines = code_file.read_text(encoding="utf-8").splitlines()
+    except Exception as e:
+        print(f"Ошибка чтения файла {code_file}: {e}")
+        return
+
+    total_lines = len(lines)
+    total_parts = math.ceil(total_lines / 20) if total_lines > 0 else 0
+
+    print(f"Файл: {code_file.name}")
+    print(f"Путь: {code_file}")
+    print(f"Всего строк: {total_lines}")
+    print(f"Всего частей по 20 строк: {total_parts}")
+
+    if total_lines == 0:
+        return
+
+    if part is None:
+        part = 1
+
+    if part < 1:
+        print("part должен быть >= 1")
+        return
+
+    start = (part - 1) * count
+    end = start + count
+
+    if start >= total_lines:
+        print(f"Часть {part} вне диапазона")
+        return
+
+    print(f"Показана часть: {part}")
+    print(f"Строки: {start + 1}-{min(end, total_lines)}")
+
+    for i, line in enumerate(lines[start:end], start=start + 1):
+        print(f"{i}: {line}")
 
 def figure(
     # autoincrement if None, else integer from 1-N
