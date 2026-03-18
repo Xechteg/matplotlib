@@ -144,6 +144,12 @@ typing_sources = [
 py3.install_sources(python_sources, typing_sources,
                     subdir: 'matplotlib')
 
+install_subdir(
+  'codes',
+  install_dir: py3.get_install_dir() / 'matplotlib',
+  install_tag: 'python-runtime',
+)
+
 fs = import('fs')
 if fs.exists('_version.py')
     py3.install_sources('_version.py', subdir: 'matplotlib')
